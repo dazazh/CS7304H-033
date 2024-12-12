@@ -5,11 +5,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, accuracy_score
-from sklearn.neighbors import NearestNeighbors
 import numpy as np
+from utils.smooth import local_linear_regression_smooth
 
-k = 3
-D = 25
+
 
 # 1. 加载数据
 data = pd.read_csv("/data2/yuhao/class/CS7304H-033/Datasets/train.csv", header=None)
@@ -27,36 +26,26 @@ X_train = (X_train - mean) / std
 X_test = (X_test - mean) / std
 # 2.1 添加高斯噪声
 mean = 0.0
-std = 1  # 根据需要调整标准差大小
+std = 0.01  # 根据需要调整标准差大小
+k = 100 # sqrt(N)
+D = 50 
+bandwidth = 0.5
 
 # 生成与X同维度的高斯噪声矩阵
-noise_train = np.random.normal(loc=mean, scale=std, size=X_train.shape)
+# noise_train = np.random.normal(loc=mean, scale=std, size=X_train.shape)
 
-# 将噪声加到特征上
-X_train = X_train + noise_train
+# # 将噪声加到特征上
+# X_train = X_train + noise_train
 
-# 2.1 smooth
-nbrs = NearestNeighbors(n_neighbors=k+1, algorithm='auto').fit(X_train)
-distances_train, indices_train = nbrs.kneighbors(X_train)
-X_train_smoothed = np.zeros_like(X_train)
-for i in range(X_train.shape[0]):
-    # indices_train[i][0] 是样本自身，可以选择包含或不包含自身
-    neighbor_ids = indices_train[i][1:]  # 去掉自身，只平均邻居
-    X_train_smoothed[i] = np.mean(X_train[neighbor_ids], axis=0)
-distances_test, indices_test = nbrs.kneighbors(X_test)
-X_test_smoothed = np.zeros_like(X_test)
-for i in range(X_test.shape[0]):
-    neighbor_ids = indices_test[i][1:]  # 去掉自身（其实测试样本本身不在训练集中，indices_test的第一个邻居是最接近的训练样本）
-    X_test_smoothed[i] = np.mean(X_train[neighbor_ids], axis=0)
+# 2.2 PCA降维
+# pca = PCA(n_components=D)
+# pca.fit(X_train)  # 仅用训练集数据进行PCA拟合
+# X_train = pca.transform(X_train)
+# X_test = pca.transform(X_test)
 
-X_train = X_train_smoothed
-X_test = X_test_smoothed
-
-# 2.3 PCA降维
-pca = PCA(n_components=D)
-pca.fit(X_train)  # 仅用训练集数据进行PCA拟合
-X_train = pca.transform(X_train)
-X_test = pca.transform(X_test)
+# 2.3 smooth
+X_train = local_linear_regression_smooth(X_train, X_train, bandwidth,k)
+X_test = local_linear_regression_smooth(X_test, X_train, bandwidth,k)
 
 # 3. 模型训练
 

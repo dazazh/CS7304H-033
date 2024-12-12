@@ -18,7 +18,7 @@ X_test = scaler.transform(X_test)
 
 # 3. 确定合理的 k 范围
 n_samples = len(X_train)
-k_range = range(1, int(n_samples**0.5) + 1, 2)  # 选择奇数 k，避免平局
+k_range = range(5, int(n_samples**0.5) + 1, 2)  # 选择奇数 k，避免平局
 
 # 4. 交叉验证选择最佳 k
 best_k = 1
@@ -37,6 +37,7 @@ knn = KNeighborsClassifier(n_neighbors=best_k, n_jobs=-1)
 knn.fit(X_train, y_train)
 y_pred = knn.predict(X_test)
 
-# 6. 保存预测结果
-pd.DataFrame(y_pred).to_csv('predictions.csv', header=False, index=False)
+# 6. 保存预测结果，添加 Id 列
+output = pd.DataFrame({'Id': range(0, len(y_pred)), 'Label': y_pred})
+output.to_csv('knn_predictions.csv', index=False)
 print("预测结果已保存至 predictions.csv")
