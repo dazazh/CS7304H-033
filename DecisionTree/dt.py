@@ -23,7 +23,7 @@ X_test = scaler.fit_transform(X_test)  # 标准化
 # 决策树模型和参数网格
 param_grid = {
     'criterion': ['gini', 'entropy'],  # 切分标准
-    'max_depth': [None, 10, 20, 30],  # 最大深度
+    'max_depth': [10, 20, 30],  # 最大深度
     'min_samples_split': [2, 5, 10],  # 每次切分最小样本数
     'min_samples_leaf': [1, 2, 4],    # 叶子节点的最小样本数
 }

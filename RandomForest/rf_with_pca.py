@@ -40,24 +40,21 @@ X_test_norm = (X_test_smoothed - mean) / std
 # 2.3 PCA降维
 pca = PCA(n_components=D)
 pca.fit(X_train_norm)  # 仅用训练集数据进行PCA拟合
-X_train_pca = pca.transform(X_train_norm)
-X_test_pca = pca.transform(X_test_norm)
+X_train = pca.transform(X_train_norm)
+X_test = pca.transform(X_test_norm)
 
+# # 应用 PCA 降维，保留 95% 的方差
+# pca = PCA(n_components=0.95)  # 保留 95% 的累计方差
 
-
-
-# 应用 PCA 降维，保留 95% 的方差
-pca = PCA(n_components=0.95)  # 保留 95% 的累计方差
-
-X_train = pca.fit_transform(X_train)
-print(f"PCA 降维后特征维度: {X_train.shape[1]}")
+# X_train = pca.fit_transform(X_train)
+# print(f"PCA 降维后特征维度: {X_train.shape[1]}")
 
 # 2. 定义随机森林分类器和超参数范围
 rf = RandomForestClassifier(random_state=42, n_jobs=-1)
 
 param_grid = {
     'n_estimators': [50, 100, 200],          # 森林中树的数量
-    'max_depth': [None, 10, 20, 30],         # 每棵树的最大深度
+    'max_depth': [10, 20, 30],         # 每棵树的最大深度
     'min_samples_split': [2, 5, 10],         # 内部节点再划分所需的最小样本数
     'min_samples_leaf': [1, 2, 4],           # 叶子节点所需的最小样本数
     'max_features': ['sqrt', 'log2'],        # 每次分裂时的最大特征数量
