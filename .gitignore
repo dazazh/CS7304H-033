@@ -1,0 +1,7 @@
+*.png
+*.jpg
+__pycache__
+cleargrasp-dataset-test-val/*
+cleargrasp-dataset-test-val.tar
+*.pth
+*.ckpt
