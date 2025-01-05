@@ -3,8 +3,8 @@ from sklearn.metrics import accuracy_score, log_loss
 import pandas as pd
 
 # 假设已经有数据特征和标签
-train_data = pd.read_csv('../Datasets/train.csv', header=None)
-test_data = pd.read_csv('../Datasets/test.csv', header=None)
+train_data = pd.read_csv('./Datasets/train.csv', header=None)
+test_data = pd.read_csv('./Datasets/test.csv', header=None)
 
 X_train = train_data.iloc[:, :-1].values  # 特征
 y_train = train_data.iloc[:, -1].values   # 标签
@@ -32,12 +32,8 @@ print("测试集log_loss:", loss)
 # 在测试集上预测标签
 y_pred = model.predict(X_test)
 
-# 如需查看模型参数，可打印model.coef_和model.intercept_
-print("模型权重:", model.coef_)
-print("模型偏置:", model.intercept_)
-
 output = pd.DataFrame({'Id': range(0, len(y_pred)), 'Label': y_pred})
-output.to_csv('res/lr_predictions.csv', index=False)
+output.to_csv('./LogisticRegression/res/lr_predictions.csv', index=False)
 print("预测结果已保存至 lr_predictions.csv")
 
 

@@ -7,8 +7,8 @@ from preprocess import preprocess
 import numpy as np
 from torch.autograd import Function
 
-data = pd.read_csv("/data2/yuhao/class/CS7304H-033/Datasets/train.csv", header=None)
-test_data = pd.read_csv("/data2/yuhao/class/CS7304H-033/Datasets/test.csv", header=None)
+data = pd.read_csv("./Datasets/train.csv", header=None)
+test_data = pd.read_csv("./Datasets/test.csv", header=None)
 
 X_train_t, y_train_t, X_val_t, y_val_t, X_test_t = preprocess(data, test_data)
 
@@ -92,7 +92,7 @@ num_classes = len(np.unique(y_train_t))  # 类别数
 hidden_dim = 256
 classifier = Classifier(input_dim=input_dim, hidden_dim=hidden_dim, num_classes=num_classes).cuda()
 domain_disc = DomainDiscriminator(input_dim=input_dim, hidden_dim=hidden_dim).cuda()
-early_stopping = EarlyStopping(patience=20, save_path_domain="/data2/yuhao/class/CS7304H-033/DANN/model/domain.ckpt",save_path_cls="/data2/yuhao/class/CS7304H-033/DANN/model/cls.ckpt")
+early_stopping = EarlyStopping(patience=20, save_path_domain="./DANN/model/domain.ckpt",save_path_cls="./DANN/model/cls.ckpt")
 
 criterion_label = nn.CrossEntropyLoss()
 criterion_domain = nn.CrossEntropyLoss()
@@ -178,6 +178,6 @@ result_df = pd.DataFrame({
 # 此时test_pred_labels为DANN对平滑后特征的预测结果
 # 如果有测试集标签，可以计算accuracy，否则仅输出预测结果用于提交
 # 保存为CSV文件
-result_df.to_csv('dann_predictions.csv', index=False)
+result_df.to_csv('./DANN/res/dann_predictions.csv', index=False)
 
 print("测试集预测结果已保存为 'dann_predictions.csv'")

@@ -12,8 +12,8 @@ k = 3
 D = 25
 
 # 1. 加载数据
-data = pd.read_csv("/data2/yuhao/class/CS7304H-033/Datasets/train.csv", header=None)
-test_data = pd.read_csv("/data2/yuhao/class/CS7304H-033/Datasets/test.csv", header=None)
+data = pd.read_csv("./Datasets/train.csv", header=None)
+test_data = pd.read_csv("./Datasets/test.csv", header=None)
 X_train = data.iloc[:, :-1].values  # 前512列为特征
 y = data.iloc[:, -1].values   # 最后一列为标签
 X_test = test_data.iloc[:, :].values  # 假设测试数据没有标签
@@ -97,6 +97,6 @@ result_df = pd.DataFrame({
 })
 
 # 保存为 CSV 文件
-result_df.to_csv('/data2/yuhao/class/CS7304H-033/SVM/svm_predictions.csv', index=False)
+result_df.to_csv('./SVM/res/svm_predictions.csv', index=False)
 
 print("测试集预测结果已保存为 'svm_predictions.csv'")

@@ -10,8 +10,8 @@ k = 5
 D = 50  # 设定降维后的维度
 
 # 1. 加载数据
-train_data = pd.read_csv('../Datasets/train.csv', header=None)
-test_data = pd.read_csv('../Datasets/test.csv', header=None)
+train_data = pd.read_csv('./Datasets/train.csv', header=None)
+test_data = pd.read_csv('./Datasets/test.csv', header=None)
 
 X_train = train_data.iloc[:, :-1].values  # 特征
 y_train = train_data.iloc[:, -1].values   # 标签
@@ -68,5 +68,5 @@ y_pred = knn.predict(X_test)
 
 # 6. 保存预测结果
 output = pd.DataFrame({'Id': range(0, len(y_pred)), 'Label': y_pred})
-output.to_csv('knn_predictions.csv', index=False)
+output.to_csv('./KNN/res/knn_predictions.csv', index=False)
 print("预测结果已保存至 knn_predictions.csv")
